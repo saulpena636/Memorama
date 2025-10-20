@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Memorama</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<main class="container">
+		<h1>Memorama</h1>
+
+		<div class="controls">
+			<label for="size">Tamaño:</label>
+			<select id="size">
+				<option value="4">4x4 (16)</option>
+				<option value="6">6x6 (36)</option>
+			</select>
+			<button id="restart">Reiniciar</button>
+			<div class="status">
+				<span id="moves">Movimientos: 0</span>
+				<span id="timer">Tiempo: 00:00</span>
+			</div>
+		</div>
+
+		<section id="board" class="board"></section>
+
+		<div id="message" class="message hidden"></div>
+	</main>
+
+	<script src="script.js"></script>
+</body>
+</html>
