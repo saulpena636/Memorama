@@ -1,4 +1,4 @@
-/* --- NUEVO: Definición de la fuente local --- */
+/* --- Definición de la fuente local --- */
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
@@ -28,21 +28,18 @@
 	--card:#ffffff;
 	--accent:#3b82f6;
 	--back:#374151;
-	
-	/* NUEVO: Sombra más suave */
 	--shadow: 0 4px 12px rgba(2, 6, 23, 0.08);
 }
 *{box-sizing:border-box}
 body{
 	margin:0;
-	/* CAMBIO: Usar la nueva fuente */
 	font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
 	background:var(--bg);
 	color:var(--back);
 	display:flex;
 	justify-content:center;
 	padding:24px;
-	/* NUEVO: Mejorar el renderizado de la fuente */
+	/* Mejora el renderizado de la fuente */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -50,7 +47,6 @@ body{
 h1{
 	text-align:center;
 	margin:6px 0 12px;
-	/* NUEVO: Darle más peso al título */
 	font-weight: 700;
 	color: var(--accent);
 }
@@ -62,18 +58,18 @@ h1{
 	margin-bottom:12px;
 }
 .controls select, .controls button{
-	padding: 8px 12px; /* CAMBIO: Más padding */
-	border-radius: 8px; /* CAMBIO: Más redondeado */
-	border: 1px solid #d1d5db; /* CAMBIO: Borde más suave */
+	padding: 8px 12px;
+	border-radius: 8px;
+	border: 1px solid #d1d5db;
 	background:#fff;
 	cursor:pointer;
-	font-family: 'Poppins', system-ui; /* CAMBIO: Heredar fuente */
-	font-size: 14px; /* NUEVO */
-	transition: all 0.2s ease; /* NUEVO */
-	box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* NUEVO */
+	font-family: 'Poppins', system-ui;
+	font-size: 14px;
+	transition: all 0.2s ease;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-/* NUEVO: Estilo específico para el botón principal */
+/* Estilo específico para el botón principal */
 .controls button {
 	background: var(--accent);
 	color: white;
@@ -96,7 +92,7 @@ h1{
 	background:transparent;
 	justify-items:stretch;
 	
-	/* NUEVO: Darle un fondo y sombra al tablero */
+	/* Fondo y sombra al tablero */
 	background: #ffffff;
 	border-radius: 12px;
 	box-shadow: var(--shadow);
@@ -111,7 +107,7 @@ h1{
 	cursor:pointer;
 }
 
-/* NUEVO: Efecto hover a la carta */
+/* Efecto hover a la carta */
 .card:not(.flipped):hover {
 	transform: scale(1.03);
 	transition: transform 0.2s ease;
@@ -121,34 +117,29 @@ h1{
 	position:absolute;inset:0;
 	transition:transform .45s;
 	transform-style:preserve-3d;
-	/* NUEVO: Redondeo de la carta */
 	border-radius: 8px;
-	/* overflow: hidden; */ /* Para que el contenido respete el borde */
 }
 .card.flipped .card-inner{transform:rotateY(180deg)}
 .card-face{
 	position:absolute;inset:0;
 	backface-visibility:hidden;
-	/* CAMBIO: Quitar borde redondeado de aquí */
 	display:flex;
 	justify-content:center;
 	align-items:center;
 	font-size:28px;
-	/* CAMBIO: Usar la nueva variable de sombra */
 	box-shadow: var(--shadow); 
 }
 
-/* CAMBIO: El 'front' ahora es el reverso azul */
 .card-front{
 	background:linear-gradient(180deg,var(--accent),#1e40af);
 	color: #fff;
-	font-size: 48px; /* NUEVO: Signo '?' más grande */
+	font-size: 48px;
 	font-weight: 700;
-	border: 2px solid #fff; /* NUEVO: Borde interno */
+	border: 2px solid #fff;
 	border-radius: 8px;
 }
 
-/* CAMBIO: El 'back' ahora es el frente blanco con la imagen */
+/* El 'back' ahora es el frente blanco con la imagen */
 .card-back{
 	background:linear-gradient(180deg,#fff,var(--card));
 	border: 1px solid #e6e9ef;
@@ -158,7 +149,6 @@ h1{
 	border-radius: 8px;
 }
 
-/* El mensaje viejo lo ocultamos por defecto */
 .message{
 	margin-top:14px;
 	padding:12px;
@@ -169,14 +159,13 @@ h1{
 }
 .hidden{display:none}
 
-/* Responsive grid sizes */
 @media (min-width:0px){
 	.board[data-size="4"]{grid-template-columns:repeat(4,1fr)}
 	.board[data-size="6"]{grid-template-columns:repeat(6,1fr)}
 }
 
 
-/* --- NUEVO: Estilos para el Modal de Victoria --- */
+/* --- Estilos para el Modal de Victoria --- */
 
 .overlay {
 	position: fixed;
@@ -185,14 +174,13 @@ h1{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	/* NUEVO: Animación de aparición */
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity 0.3s ease, visibility 0.3s ease;
 	z-index: 1000;
 }
 
-/* Así se muestra el modal */
+/* Muestra el modal */
 .overlay:not(.hidden) {
 	opacity: 1;
 	visibility: visible;
@@ -204,7 +192,6 @@ h1{
 	border-radius: 16px;
 	text-align: center;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-	/* NUEVO: Animación de entrada */
 	transform: scale(0.9);
 	transition: transform 0.3s ease;
 }

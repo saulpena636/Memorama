@@ -22,8 +22,6 @@
 	let timer = null;
 	let seconds = 0;
 
-	// Simple set of image filenames (place your images in the "images" folder next to script)
-	// Example: c:\Users\suoer\OneDrive\Escritorio\Memorama\images\img1.png
 	const IMAGE_FOLDER = 'images/';
 	const IMAGE_FILES = [
 		'bash.png','c.png','c%23.png','c++.png','dart.png','go.png',
@@ -34,7 +32,7 @@
 	function init() {
 		size = parseInt(sizeSel.value, 10);
 		totalCards = size * size;
-		if (totalCards % 2 !== 0) totalCards = size * size + 1; // ensure even (shouldn't happen here)
+		if (totalCards % 2 !== 0) totalCards = size * size + 1;
 		resetState();
 		createSymbols();
 		renderBoard();
@@ -48,28 +46,21 @@
 		clearInterval(timer);
 		timer = null;
 		messageEl.classList.add('hidden');
-		
-		// NUEVO: Ocultar el modal al reiniciar
 		winOverlayEl.classList.add('hidden');
 	}
 
 	function createSymbols() {
 		const neededPairs = totalCards / 2;
-		// Prepare pool of image paths
 		const pool = IMAGE_FILES.map(f => IMAGE_FOLDER + f);
-		// If not enough distinct images, repeat the pool
 		if (neededPairs > pool.length) {
 			while (pool.length < neededPairs) pool.push(...IMAGE_FILES.map(f => IMAGE_FOLDER + f));
 		}
 		shuffleArray(pool);
-		// Create pairs of image paths
 		symbols = pool.slice(0, neededPairs).flatMap(s => [s, s]);
 		shuffleArray(symbols);
-		// Preload images for smoother flips
 		preloadImages(symbols);
 	}
 
-	// Preload helper
 	function preloadImages(list) {
 		list.forEach(src => {
 			const img = new Image();
@@ -84,7 +75,7 @@
 			const card = document.createElement('div');
 			card.className = 'card';
 			card.dataset.index = i;
-			card.tabIndex = 0; // make focusable for keyboard access
+			card.tabIndex = 0;
 			card.innerHTML = `
 				<div class="card-inner">
 					<div class="card-face card-front"></div>
@@ -97,10 +88,8 @@
 			
 			front.textContent = '?';
 			
-			// Use an <img> tag for the back face when we have an image path
 			const imgSrc = symbols[i] || '';
 			back.innerHTML = imgSrc ? `<img src="${imgSrc}" alt="carta ${i+1}" style="max-width:80%;max-height:80%;object-fit:contain;">` : '';
-			// Click handler
 			card.addEventListener('click', onCardClick);
 			boardEl.appendChild(card);
 		}
@@ -111,7 +100,7 @@
 		if (lock) return;
 		if (card.classList.contains('flipped')) return;
 
-		// Start timer on first move
+		// Empieza el temporizador en el primer moviemiento
 		if (moves === 0 && !timer) {
 			startTimer();
 		}
@@ -139,11 +128,11 @@
 			second.classList.add('matched');
 			resetTurn();
 			if (matches === totalCards / 2) {
-				// CAMBIO: Llamar a win() 500ms después para que se vea la última carta
+				// Llamar a win() 500ms después para que se vea la última carta
 				setTimeout(win, 500);
 			}
 		} else {
-			// Not match, flip back
+			// No coincide, da vuelta a la carta
 			setTimeout(() => {
 				first.classList.remove('flipped');
 				second.classList.remove('flipped');
@@ -176,11 +165,11 @@
 	function win() {
 		clearInterval(timer);
 		
-		// CAMBIO: Lógica para mostrar el modal de victoria
+		// Lógica para mostrar el modal de victoria
 		winMessageTextEl.textContent = `Completaste en ${moves} movimientos y ${formatTime(seconds)}.`;
 		winOverlayEl.classList.remove('hidden');
 		
-		// Ocultamos el mensaje viejo por si acaso
+		// Oculta el mensaje viejo
 		messageEl.classList.add('hidden');
 	}
 
@@ -197,17 +186,17 @@
 		}
 	}
 
-	// Controls
+	// Controles
 	restartBtn.addEventListener('click', init);
 	sizeSel.addEventListener('change', init);
 	
-	// NUEVO: Listener para el botón de reinicio en el modal
+	// Listener para el botón de reinicio en el modal
 	winRestartBtn.addEventListener('click', init);
 
-	// Init first time
+	// Inicia por primera vez
 	init();
 
-	// Optional: keyboard accessibility (flip with Enter/Space when focused)
+	// keyboard accessibility (flip with Enter/Space when focused)
 	boardEl.addEventListener('keydown', (e) => {
 		const el = e.target;
 		if (!el.classList || !el.classList.contains('card')) return;
