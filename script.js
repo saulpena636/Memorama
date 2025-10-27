@@ -5,6 +5,11 @@
 	const restartBtn = document.getElementById('restart');
 	const sizeSel = document.getElementById('size');
 	const messageEl = document.getElementById('message');
+	
+	// NUEVO: Elementos del modal de victoria
+	const winOverlayEl = document.getElementById('win-overlay');
+	const winMessageTextEl = document.getElementById('win-message-text');
+	const winRestartBtn = document.getElementById('win-restart-btn');
 
 	let size = parseInt(sizeSel.value, 10);
 	let totalCards = size * size;
@@ -43,6 +48,9 @@
 		clearInterval(timer);
 		timer = null;
 		messageEl.classList.add('hidden');
+		
+		// NUEVO: Ocultar el modal al reiniciar
+		winOverlayEl.classList.add('hidden');
 	}
 
 	function createSymbols() {
@@ -86,7 +94,9 @@
 			// Set faces
 			const front = card.querySelector('.card-front');
 			const back = card.querySelector('.card-back');
-			front.textContent = ''; // keep front blank
+			
+			front.textContent = '?';
+			
 			// Use an <img> tag for the back face when we have an image path
 			const imgSrc = symbols[i] || '';
 			back.innerHTML = imgSrc ? `<img src="${imgSrc}" alt="carta ${i+1}" style="max-width:80%;max-height:80%;object-fit:contain;">` : '';
@@ -129,7 +139,8 @@
 			second.classList.add('matched');
 			resetTurn();
 			if (matches === totalCards / 2) {
-				win();
+				// CAMBIO: Llamar a win() 500ms después para que se vea la última carta
+				setTimeout(win, 500);
 			}
 		} else {
 			// Not match, flip back
@@ -164,8 +175,13 @@
 
 	function win() {
 		clearInterval(timer);
-		messageEl.textContent = `¡Felicidades! Completaste en ${moves} movimientos y ${formatTime(seconds)}.`;
-		messageEl.classList.remove('hidden');
+		
+		// CAMBIO: Lógica para mostrar el modal de victoria
+		winMessageTextEl.textContent = `Completaste en ${moves} movimientos y ${formatTime(seconds)}.`;
+		winOverlayEl.classList.remove('hidden');
+		
+		// Ocultamos el mensaje viejo por si acaso
+		messageEl.classList.add('hidden');
 	}
 
 	function formatTime(s) {
@@ -184,6 +200,9 @@
 	// Controls
 	restartBtn.addEventListener('click', init);
 	sizeSel.addEventListener('change', init);
+	
+	// NUEVO: Listener para el botón de reinicio en el modal
+	winRestartBtn.addEventListener('click', init);
 
 	// Init first time
 	init();
