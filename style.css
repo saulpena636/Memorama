@@ -1,21 +1,55 @@
+/* --- Definición de la fuente local --- */
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  src: url('fonts/Poppins-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/Poppins-Bold.ttf') format('truetype');
+}
+
+/* --- Fin de la definición --- */
+
+
 :root{
 	--bg:#f5f7fb;
 	--card:#ffffff;
 	--accent:#3b82f6;
 	--back:#374151;
+	--shadow: 0 4px 12px rgba(2, 6, 23, 0.08);
 }
 *{box-sizing:border-box}
 body{
 	margin:0;
-	font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+	font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
 	background:var(--bg);
 	color:var(--back);
 	display:flex;
 	justify-content:center;
 	padding:24px;
+	/* Mejora el renderizado de la fuente */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 .container{max-width:900px;width:100%}
-h1{text-align:center;margin:6px 0 12px}
+h1{
+	text-align:center;
+	margin:6px 0 12px;
+	font-weight: 700;
+	color: var(--accent);
+}
 .controls{
 	display:flex;
 	align-items:center;
@@ -24,12 +58,32 @@ h1{text-align:center;margin:6px 0 12px}
 	margin-bottom:12px;
 }
 .controls select, .controls button{
-	padding:6px 10px;
-	border-radius:6px;
-	border:1px solid #ddd;
+	padding: 8px 12px;
+	border-radius: 8px;
+	border: 1px solid #d1d5db;
 	background:#fff;
 	cursor:pointer;
+	font-family: 'Poppins', system-ui;
+	font-size: 14px;
+	transition: all 0.2s ease;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
+
+/* Estilo específico para el botón principal */
+.controls button {
+	background: var(--accent);
+	color: white;
+	font-weight: 600;
+	border-color: var(--accent);
+}
+.controls button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 3px 6px rgba(59, 130, 246, 0.2);
+}
+.controls select:hover {
+	border-color: var(--accent);
+}
+
 .status{display:flex;gap:12px;align-items:center}
 .board{
 	display:grid;
@@ -37,6 +91,13 @@ h1{text-align:center;margin:6px 0 12px}
 	padding:10px;
 	background:transparent;
 	justify-items:stretch;
+	
+	/* Fondo y sombra al tablero */
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: var(--shadow);
+	padding: 16px;
+	gap: 16px;
 }
 .card{
 	position:relative;
@@ -45,33 +106,49 @@ h1{text-align:center;margin:6px 0 12px}
 	perspective:800px;
 	cursor:pointer;
 }
+
+/* Efecto hover a la carta */
+.card:not(.flipped):hover {
+	transform: scale(1.03);
+	transition: transform 0.2s ease;
+}
+
 .card-inner{
 	position:absolute;inset:0;
 	transition:transform .45s;
 	transform-style:preserve-3d;
+	border-radius: 8px;
 }
 .card.flipped .card-inner{transform:rotateY(180deg)}
 .card-face{
 	position:absolute;inset:0;
 	backface-visibility:hidden;
-	border-radius:8px;
 	display:flex;
 	justify-content:center;
 	align-items:center;
 	font-size:28px;
-	box-shadow:0 2px 6px rgba(2,6,23,0.08);
+	box-shadow: var(--shadow); 
 }
+
 .card-front{
-	background:linear-gradient(180deg,#fff,var(--card));
-	border:1px solid #e6e9ef;
-}
-.card-back{
 	background:linear-gradient(180deg,var(--accent),#1e40af);
-	color:#fff;
-	transform:rotateY(180deg);
-	font-size:24px;
-	font-weight:700;
+	color: #fff;
+	font-size: 48px;
+	font-weight: 700;
+	border: 2px solid #fff;
+	border-radius: 8px;
 }
+
+/* El 'back' ahora es el frente blanco con la imagen */
+.card-back{
+	background:linear-gradient(180deg,#fff,var(--card));
+	border: 1px solid #e6e9ef;
+	color: var(--back); /* No se usa, pero por si acaso */
+	transform:rotateY(180deg);
+	font-weight:700;
+	border-radius: 8px;
+}
+
 .message{
 	margin-top:14px;
 	padding:12px;
@@ -82,8 +159,71 @@ h1{text-align:center;margin:6px 0 12px}
 }
 .hidden{display:none}
 
-/* Responsive grid sizes */
 @media (min-width:0px){
 	.board[data-size="4"]{grid-template-columns:repeat(4,1fr)}
 	.board[data-size="6"]{grid-template-columns:repeat(6,1fr)}
+}
+
+
+/* --- Estilos para el Modal de Victoria --- */
+
+.overlay {
+	position: fixed;
+	inset: 0; /* (top: 0, left: 0, right: 0, bottom: 0) */
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+	z-index: 1000;
+}
+
+/* Muestra el modal */
+.overlay:not(.hidden) {
+	opacity: 1;
+	visibility: visible;
+}
+
+.overlay-modal {
+	background: white;
+	padding: 28px 36px;
+	border-radius: 16px;
+	text-align: center;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+	transform: scale(0.9);
+	transition: transform 0.3s ease;
+}
+
+.overlay:not(.hidden) .overlay-modal {
+	transform: scale(1);
+}
+
+.overlay-modal h2 {
+	margin: 0 0 12px;
+	color: var(--accent);
+	font-size: 2.25rem;
+}
+
+.overlay-modal p {
+	margin: 0 0 24px;
+	font-size: 1.1rem;
+}
+
+.overlay-modal button {
+	padding: 12px 24px;
+	border-radius: 8px;
+	border: none;
+	background: var(--accent);
+	color: white;
+	font-weight: 600;
+	cursor: pointer;
+	font-size: 1rem;
+	font-family: 'Poppins', system-ui;
+	transition: all 0.2s ease;
+}
+.overlay-modal button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
 }
