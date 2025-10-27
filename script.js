@@ -1,11 +1,13 @@
 (() => {
 	const boardEl = document.getElementById('board');
+	const bgMusicEl = document.getElementById('bg-music');
 	const movesEl = document.getElementById('moves');
 	const timerEl = document.getElementById('timer');
 	const restartBtn = document.getElementById('restart');
 	const sizeSel = document.getElementById('size');
 	const messageEl = document.getElementById('message');
-	
+	let musicStarted = false;
+
 	// NUEVO: Elementos del modal de victoria
 	const winOverlayEl = document.getElementById('win-overlay');
 	const winMessageTextEl = document.getElementById('win-message-text');
@@ -24,9 +26,9 @@
 
 	const IMAGE_FOLDER = 'images/';
 	const IMAGE_FILES = [
-		'bash.png','c.png','c%23.png','c++.png','dart.png','go.png',
-		'java.png','javascript.png','kotlin.png','matlab.png','perl.png','php.png',
-		'python.png','r.png','ruby.png','rust.png','swift.png','typescript.png'
+		'bash.png', 'c.png', 'c%23.png', 'c++.png', 'dart.png', 'go.png',
+		'java.png', 'javascript.png', 'kotlin.png', 'matlab.png', 'perl.png', 'php.png',
+		'python.png', 'r.png', 'ruby.png', 'rust.png', 'swift.png', 'typescript.png'
 	];
 
 	function init() {
@@ -85,17 +87,21 @@
 			// Set faces
 			const front = card.querySelector('.card-front');
 			const back = card.querySelector('.card-back');
-			
+
 			front.textContent = '?';
-			
+
 			const imgSrc = symbols[i] || '';
-			back.innerHTML = imgSrc ? `<img src="${imgSrc}" alt="carta ${i+1}" style="max-width:80%;max-height:80%;object-fit:contain;">` : '';
+			back.innerHTML = imgSrc ? `<img src="${imgSrc}" alt="carta ${i + 1}" style="max-width:80%;max-height:80%;object-fit:contain;">` : '';
 			card.addEventListener('click', onCardClick);
 			boardEl.appendChild(card);
 		}
 	}
 
 	function onCardClick(e) {
+		if (!musicStarted) {
+			bgMusicEl.play().catch(e => console.error("Error al reproducir música:", e)); // Intenta reproducir y captura errores
+			musicStarted = true;
+		}
 		const card = e.currentTarget;
 		if (lock) return;
 		if (card.classList.contains('flipped')) return;
@@ -157,25 +163,25 @@
 	}
 
 	function updateTimer() {
-		const mm = String(Math.floor(seconds / 60)).padStart(2,'0');
-		const ss = String(seconds % 60).padStart(2,'0');
+		const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
+		const ss = String(seconds % 60).padStart(2, '0');
 		timerEl.textContent = `Tiempo: ${mm}:${ss}`;
 	}
 
 	function win() {
 		clearInterval(timer);
-		
+
 		// Lógica para mostrar el modal de victoria
 		winMessageTextEl.textContent = `Completaste en ${moves} movimientos y ${formatTime(seconds)}.`;
 		winOverlayEl.classList.remove('hidden');
-		
+
 		// Oculta el mensaje viejo
 		messageEl.classList.add('hidden');
 	}
 
 	function formatTime(s) {
-		const mm = Math.floor(s/60);
-		const ss = s%60;
+		const mm = Math.floor(s / 60);
+		const ss = s % 60;
 		return `${mm}m ${ss}s`;
 	}
 
@@ -189,9 +195,14 @@
 	// Controles
 	restartBtn.addEventListener('click', init);
 	sizeSel.addEventListener('change', init);
-	
+
 	// Listener para el botón de reinicio en el modal
 	winRestartBtn.addEventListener('click', init);
+
+	// Configura la música de fondo
+	if (bgMusicEl) {
+		bgMusicEl.volume = 0.7; // volumen normal (0.0 a 1.0)
+	}
 
 	// Inicia por primera vez
 	init();
