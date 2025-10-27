@@ -21,9 +21,9 @@
 	// Example: c:\Users\suoer\OneDrive\Escritorio\Memorama\images\img1.png
 	const IMAGE_FOLDER = 'images/';
 	const IMAGE_FILES = [
-		'img1.png','img2.png','img3.png','img4.png','img5.png','img6.png',
-		'img7.png','img8.png','img9.png','img10.png','img11.png','img12.png',
-		'img13.png','img14.png','img15.png','img16.png','img17.png','img18.png'
+		'bash.png','c.png','c%23.png','c++.png','dart.png','go.png',
+		'java.png','javascript.png','kotlin.png','matlab.png','perl.png','php.png',
+		'python.png','r.png','ruby.png','rust.png','swift.png','typescript.png'
 	];
 
 	function init() {
